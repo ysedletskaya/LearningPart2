@@ -23,6 +23,10 @@ namespace ChatWithBot
         public MainWindow()
         {
             InitializeComponent();
+            List<ChatMessage> messages = new List<ChatMessage>();
+            messages.Add(new ChatMessage("test message"));
+            messages.Add(new ChatMessage("answer", "Tom"));
+            lbChatMessages.ItemsSource = messages;
         }
     }
 }
