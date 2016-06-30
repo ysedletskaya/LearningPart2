@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,13 +21,48 @@ namespace ChatWithBot
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<ChatMessage> messages = null;
+        string textBoxMessage = null;
+
         public MainWindow()
         {
             InitializeComponent();
-            List<ChatMessage> messages = new List<ChatMessage>();
-            messages.Add(new ChatMessage("test message"));
-            messages.Add(new ChatMessage("answer", "Tom"));
+            messages = new List<ChatMessage>();
+            Assembly myAsm = Assembly.LoadFrom("bin\\DLLs\\");
+        }
+
+        private void addChatMessage(string text)
+        {
+            messages.Add(new ChatMessage(text));
+            messageTextBox.Text = "";
             lbChatMessages.ItemsSource = messages;
+            lbChatMessages.Items.Refresh();
+        }
+
+        private void getAnswer(string text)
+        {
+            string answer = null;
+            messages.Add(new ChatMessage(answer));
+            lbChatMessages.ItemsSource = messages;
+            lbChatMessages.Items.Refresh();
+        }
+
+        private void sendButton_Click(object sender, RoutedEventArgs e)
+        {
+            addChatMessage(textBoxMessage);
+        }
+
+        private void messageTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            textBoxMessage = messageTextBox.Text;
+        }
+
+        private void messageTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                addChatMessage(textBoxMessage);
+            }
         }
     }
 }

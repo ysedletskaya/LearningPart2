@@ -33,9 +33,9 @@
                 </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        <!-- Send button -->
-            <Button Grid.Column="0" Grid.Row="2" Margin="0,10,0,0" Width="35" Height="25" HorizontalAlignment="Right" RenderTransformOrigin="0.503,0.5">Send</Button>
+            <!-- Send button -->
+            <Button Grid.Column="0" Grid.Row="2" Margin="0,10,0,0" Width="35" Height="25" HorizontalAlignment="Right" RenderTransformOrigin="0.503,0.5" Click="sendButton_Click">Send</Button>
             <!-- Message text box -->
-            <TextBox Name="messageTextBox" HorizontalAlignment="Left" Height="25" Margin="0,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="175"/>
+            <TextBox Name="messageTextBox" HorizontalAlignment="Left" Height="25" Margin="0,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="175" TextChanged="messageTextBox_TextChanged" KeyDown="messageTextBox_KeyDown"/>
         </Grid>
 </Window>
