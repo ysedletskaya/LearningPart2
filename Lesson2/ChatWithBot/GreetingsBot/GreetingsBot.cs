@@ -18,22 +18,23 @@ namespace GreetingsBot
 
         public string Answer(string message)
         {
+            message = message.ToLower();
             switch (message)
             {
-                case "Hi":
-                case "Hello":
-                case "Hey":
+                case "hi":
+                case "hello":
+                case "hey":
                     return "Hello!";
-                case "How are you?":
-                case "What's up?":
+                case "how are you?":
+                case "what's up?":
                     return "I'm great! What about you?";
-                case "Buy":
-                case "Good buy":
+                case "buy":
+                case "good buy":
                     return "Buy-buy, have a great day!";
-                case "Have a great day":
-                case "Have a great weekend":
-                case "Have a great evening":
-                case "Have a great week":
+                case "have a great day":
+                case "have a great weekend":
+                case "have a great evening":
+                case "have a great week":
                     return "You too, we'll keep in touch!";
             }
             return "";

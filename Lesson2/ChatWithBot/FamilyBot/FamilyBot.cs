@@ -18,26 +18,27 @@ namespace FamilyBot
 
         public string Answer(string message)
         {
+            message = message.ToLower();
             switch (message)
             {
-                case "How is your family?":
-                case "How is your wife?":
-                case "How are your kids?":
+                case "how is your family?":
+                case "how is your wife?":
+                case "how are your kids?":
                     return "Fine, thanks!";
-                case "Do you have family?":
-                case "Do you have wife?":
-                case "Do you have kids?":
+                case "do you have family?":
+                case "do you have wife?":
+                case "do you have kids?":
                     return "Yes, I do!";
-                case "How many kids do you have?":
-                case "How big is your family?":
+                case "how many kids do you have?":
+                case "how big is your family?":
                     return "I have 5 kids!";
-                case "How old are your kids?":
-                case "How old are them?":
+                case "how old are your kids?":
+                case "how old are them?":
                     return "12, 9, 6, 3, 1 years.";
-                case "What are the names of your kids?":
-                case "What are their names?":
+                case "what are the names of your kids?":
+                case "what are their names?":
                     return "Susan, Bob, Chase, Glan and John.";
-                case "What's your wife's name?":
+                case "what's your wife's name?":
                     return "Her nam is Victoria.";
             }
             return "";

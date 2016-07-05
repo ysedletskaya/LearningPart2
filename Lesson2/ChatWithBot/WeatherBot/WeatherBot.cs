@@ -18,22 +18,23 @@ namespace WeatherBot
 
         public string Answer(string message)
         {
+            message = message.ToLower();
             switch (message)
             {
-                case "What's the weather today?":
-                case "What's the weather on your side?":
-                case "How do you like the weather today?":
+                case "what's the weather today?":
+                case "what's the weather on your side?":
+                case "how do you like the weather today?":
                     return "It is very hot today... I cannot stand it anymore.";
-                case "Is it sunny?":
-                case "Is it rainy?":
-                case "Is it cloudy?":
+                case "is it sunny?":
+                case "is it rainy?":
+                case "is it cloudy?":
                     return "It was, but not at the moment.";
-                case "What kind of weather do you like?":
-                case "Any prefferences regarding the weather?":
-                case "What's you favorite weather?":
+                case "what kind of weather do you like?":
+                case "any prefferences regarding the weather?":
+                case "what's you favorite weather?":
                     return "I like when it's warm, cloudy and windy.";
-                case "Do you know about the weather for tomorrow?":
-                case "What's the weather tomorrow?":
+                case "do you know about the weather for tomorrow?":
+                case "what's the weather tomorrow?":
                     return "It's going to be rainy and cold as far as I know";
             }
             return "";
