@@ -12,20 +12,21 @@ namespace IniSerializer
         [IniKey(ElementName = "name")]
         public string Name { set; get; }
 
-        [IniSection(ElementName = "owner")]
         [IniKey(ElementName = "organization")]
-        public string OrganizationName { set; get; }
+        public string Organization { set; get; }
 
         [IniSection(ElementName = "database")]
         [IniKey(ElementName = "server")]
         public string Server { set; get; }
 
-        [IniSection(ElementName = "database")]
         [IniKey(ElementName = "port")]
         public int Port { set; get; }
 
-        [IniSection(ElementName = "database")]
         [IniKey(ElementName = "file")]
         public string File { set; get; }
+
+        [IniKey(ElementName = "coefficient")]
+        public double Coefficient { set; get; }
+
     }
 }

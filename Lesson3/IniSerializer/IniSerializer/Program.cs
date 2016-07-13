@@ -14,6 +14,13 @@ namespace IniSerializer
         {
             DatabaseOptions dbConnection = new DatabaseOptions();
 
+            dbConnection.Name = "John Doe";
+            dbConnection.Organization = "Acme Widgets Inc.";
+            dbConnection.Server = "192.0.2.62";
+            dbConnection.Port = 143;
+            dbConnection.File = "payroll.dat";
+            dbConnection.Coefficient = 3.456;
+
             IniSerializer serializer = new IniSerializer(typeof(DatabaseOptions));
 
             Stream stream = File.Open("DatabaseOptions.ini", FileMode.Create);
@@ -23,7 +30,7 @@ namespace IniSerializer
                 serializer.Serialize(writer, dbConnection);
             }
 
-            using (TextReader reader = new StreamReader(stream))
+            using (TextReader reader = new StreamReader("DatabaseOptions.ini"))
             {
                 DatabaseOptions dbDeserealized = serializer.Deserialize(reader) as DatabaseOptions;
             }
