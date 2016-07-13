@@ -29,27 +29,28 @@ namespace ChatWithBot
 
         public void LoadDLLs()
         {
-            // Get all DLL names from \bin\DLLs\
-            string[] dllFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll");
+            // Get all DLL names from \output\DLLs\
+            string bothPath = Path.Combine(Directory.GetCurrentDirectory(), "DLLs");
+            string[] dllFiles = Directory.GetFiles(bothPath, "*.dll");
             foreach (string dllPath in dllFiles)
             {
                 // Load Bot library one by one from \bin\DLLs\
                 Assembly myAsm = Assembly.LoadFrom(dllPath);
 
-                // Get DLL's name and get assemly Type using it
-                string asmName = GetAsmTypeName(dllPath);
-                Type bot = myAsm.GetType(string.Concat(asmName, ".", asmName));
-
-                // Add instance for all create bots to the list
-                botObjs.Add(Activator.CreateInstance(bot) as IBot);
+                // Get all DLL types and identify derived from IBot
+                Type[] botTypes = myAsm.GetTypes();
+                foreach (Type bot in botTypes)
+                {
+                    foreach (Type ibot in bot.GetInterfaces())
+                    {
+                        if (ibot.Name == "IBot")
+                        {
+                            // Add instance for all create bots to the list
+                            botObjs.Add(Activator.CreateInstance(bot) as IBot);
+                        }
+                    }
+                }
             }
-        }
-
-        public static string GetAsmTypeName(string file)
-        {
-            string[] filename = file.Split('\\');
-            string[] typename = filename[filename.Length - 1].Split('.');
-            return typename[0];
         }
 
         private void addChatMessage(string text, string sender = "Me")
