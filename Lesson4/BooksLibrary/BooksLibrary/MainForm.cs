@@ -15,7 +15,10 @@ namespace BooksLibrary
         
         public MainForm()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            //Library MyLib = new Library();
+            //MyLib.GenerateBooksFromFile("books.txt");
+            //MyLib.GenerateReaders("femalenames.txt", "malenames.txt", "surnames.txt");
         }
     }
 }
