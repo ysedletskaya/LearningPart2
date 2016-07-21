@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace BooksLibrary
 {
     public class Library
     {
+        public Dictionary<Reader, List<Book>> AssignedBooks { get; set; }
+
         public List<Book> Books { get; set; }
+
         public List<Reader> Readers { get; set; }
-        public Dictionary<Reader,List<Book>> AssignedBooks { get; set; }
 
         public Library()
         {
@@ -38,37 +43,17 @@ namespace BooksLibrary
             return book;
         }
 
-        public void GenerateReaders(string fileFemaleNames, string fileMaleNames, string filePathSurnames, int numOfReaders)
+        private void FillReadersFromLists(List<string> names, List<string> surnames, string gender, int numOfRepeats)
         {
             Random randomN = new Random();
-            List<string> femaleNames = new List<string>();
-            List<string> maleNames = new List<string>();
-            List<string> surnameStrings = new List<string>();
-            FileHandling.ReadFromFile(fileFemaleNames, out femaleNames);
-            FileHandling.ReadFromFile(fileMaleNames, out maleNames);
-            FileHandling.ReadFromFile(filePathSurnames, out surnameStrings);
-            for (int i = 0; i < numOfReaders / 2; i++)
+            for (int i = 0; i < numOfRepeats; i++)
             {
-                string femaleName = femaleNames[randomN.Next(femaleNames.Count - 1)];
-                string surname = surnameStrings[randomN.Next(surnameStrings.Count - 1)];
+                string name = names[randomN.Next(names.Count - 1)];
+                string surname = surnames[randomN.Next(surnames.Count - 1)];
                 int age = randomN.Next(16, 100);
-                if (!Readers.Contains(new Reader(femaleName, surname, age, "female")))
+                if (!Readers.Contains(new Reader(name, surname, age, gender)))
                 {
-                    Readers.Add(new Reader(femaleName, surname, age, "female"));
-                }
-                else
-                {
-                    i--;
-                }
-            }
-            for (int i = 0; i < numOfReaders / 2; i++)
-            {
-                string maleName = maleNames[randomN.Next(maleNames.Count - 1)];
-                string surname = surnameStrings[randomN.Next(surnameStrings.Count - 1)];
-                int age = randomN.Next(16, 100);
-                if (!Readers.Contains(new Reader(maleName, surname, age, "male")))
-                {
-                    Readers.Add(new Reader(maleName, surname, age, "male"));
+                    Readers.Add(new Reader(name, surname, age, gender));
                 }
                 else
                 {
@@ -76,10 +61,64 @@ namespace BooksLibrary
                 }
             }
         }
+
+        public void GenerateReaders(string fileFemaleNames, string fileMaleNames, string filePathSurnames, int numOfReaders)
+        {            
+            List<string> femaleNames = new List<string>();
+            List<string> maleNames = new List<string>();
+            List<string> surnameStrings = new List<string>();
+            FileHandling.ReadFromFile(fileFemaleNames, out femaleNames);
+            FileHandling.ReadFromFile(fileMaleNames, out maleNames);
+            FileHandling.ReadFromFile(filePathSurnames, out surnameStrings);
+            FillReadersFromLists(femaleNames, surnameStrings, "female", numOfReaders / 2);
+            FillReadersFromLists(maleNames, surnameStrings, "male", numOfReaders / 2);
+        }
         
         public void GenerateBooksAssignment(int numOfAssignments)
         {
+            Random randomN = new Random();
+            for (int i = 0; i < numOfAssignments; i++)
+            {
+                Reader randomReader = Readers[randomN.Next(Readers.Count - 1)];
+                Book randomBook = Books[randomN.Next(Books.Count - 1)];
+                if (!AssignedBooks.ContainsKey(randomReader))
+                {
+                    AssignedBooks.Add(randomReader, new List<Book> { randomBook });                   
+                }
+                else if (AssignedBooks.ContainsKey(randomReader))
+                {
+                    List<Book> booksOfRandomReader = new List<Book>();
+                    AssignedBooks.TryGetValue(randomReader, out booksOfRandomReader);
+                    if ((booksOfRandomReader != null) && !booksOfRandomReader.Contains(randomBook))
+                    {
+                        booksOfRandomReader.Add(randomBook);
+                    }
+                    else
+                    {
+                        i--;
+                    }
+                }
+            }
+        }
 
+        public void XMLSerializeLibrary(string xmlFileName)
+        {
+            XElement root = new XElement("Library");
+
+            foreach (var item in AssignedBooks)
+            {
+                XElement dataItem = new XElement("DataItem");
+                XElement reader = new XElement("Reader");
+                reader.Add(new XElement("FullName", item.Key.FullName));
+                reader.Add(new XElement("Age", item.Key.Age));
+                reader.Add(new XElement("Gender", item.Key.Gender));
+                dataItem.Add(reader);
+                XElement books = new XElement("Books");
+                item.Value.ForEach(x => books.Add(new XElement("Book", new XElement("Name", x.Name), new XElement("Author", x.Author))));
+                dataItem.Add(books);
+                root.Add(dataItem);
+            }
+            root.WriteTo(XmlWriter.Create(xmlFileName));
         }
     }
 }
